@@ -49,6 +49,8 @@ class AuthController {
         this.userInputValidator.validatePhoneNumber(user_phone);
       const validatedUsername =
         this.userInputValidator.validateUsername(user_name);
+
+      // Hash password
       const hashedPassword = await this.cryptography.hashPassword(
         user_password
       );
@@ -76,10 +78,24 @@ class AuthController {
         user_email,
         user_phone,
         user_password: hashedPassword,
+        // user_role: "user",
       };
 
       await this.authService.registerUser(user);
-      res.status(201).json("User registered successfully");
+      res.status(201).json(
+        new HttpResponse(
+          Code.SUCCESS,
+          Status.SUCCESS,
+          "User registered successfully",
+          {
+            user_name,
+            user_first_name,
+            user_last_name,
+            user_email,
+            user_phone,
+          }
+        )
+      );
       //  return;
     } catch (error) {
       res.status(400).json({ error: "Error registering user" });
@@ -96,7 +112,15 @@ class AuthController {
 
       const user = await this.authService.getUserByEmail(req.body.user_email);
       if (!user) {
-        res.status(404).json({ message: "User not found" });
+        res
+          .status(Code.BAD_REQUEST)
+          .json(
+            new HttpResponse(
+              Code.BAD_REQUEST,
+              Status.BAD_REQUEST,
+              "User not found"
+            )
+          );
         return;
       }
 
@@ -109,30 +133,55 @@ class AuthController {
         req.body.user_email
       );
       if (!validatedEmail || !isPasswordValid) {
-        res.status(400).json({
-          error: "Invalid input",
-          message: "Please check your email or password",
-        });
-        return;
-      } else {
-        res.status(200).json({
-          message: "Login successful",
-          user: {
-            user_id: user.user_id,
-            user_name: user.user_name,
-            user_first_name: user.user_first_name,
-            user_last_name: user.user_last_name,
-            user_email: user.user_email,
-            user_phone: user.user_phone,
-          },
-        });
+        res
+          .status(Code.BAD_REQUEST)
+          .json(
+            new HttpResponse(
+              Code.BAD_REQUEST,
+              Status.BAD_REQUEST,
+              "Please check your email or password"
+            )
+          );
         return;
       }
+
+      const tokens = await this.authService.generateTokens(user);
+      if (!tokens) {
+        res
+          .status(Code.BAD_REQUEST)
+          .json(
+            new HttpResponse(
+              Code.BAD_REQUEST,
+              Status.BAD_REQUEST,
+              "Error generating tokens"
+            )
+          );
+        return;
+      }
+
+      res.status(Code.SUCCESS).json(
+        new HttpResponse(Code.SUCCESS, Status.SUCCESS, "Login successful", {
+          user_name: user.user_name,
+          user_first_name: user.user_first_name,
+          user_last_name: user.user_last_name,
+          user_email: user.user_email,
+          user_phone: user.user_phone,
+          user_role: user.user_role,
+
+          access_token: tokens.accessToken,
+          refresh_token: tokens.refreshToken,
+        })
+      );
+      return;
     } catch (error) {
       res.status(400).json({ error: "Error logging in user" });
       console.log(error);
     }
   };
+
+  handleGetSecretToken = async (req: Request, res: Response) => {};
+
+  handleRefreshToken = async (req: Request, res: Response) => {};
 }
 
 export default new AuthController();
