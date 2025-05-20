@@ -4,11 +4,17 @@ import express, { Express, Request, Response } from "express";
 import logger from "./config/logger";
 import morgan from "morgan";
 
+// STATUS & HTTP RESPONSE
+import { Code } from "./enums/code.enum";
+import { Status } from "./enums/status.enum";
+import HttpResponse from "./config/response";
+
 // ROUTES
 import authRouter from "./routes/auth.route";
+import userRouter from "./routes/user.route";
 
 const app: Express = express();
-// Add this middleware for parsing request bodies
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,11 +42,20 @@ app.use(
 );
 
 // Routes
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 
 // 404 Handler
 app.use((_, res) => {
-  res.status(404).json({ message: "Path not found" });
+  res
+    .status(Code.PATH_NOT_FOUND)
+    .json(
+      new HttpResponse(
+        Code.PATH_NOT_FOUND,
+        Status.PATH_NOT_FOUND,
+        "Sorry, the path you're looking for doesn't exist :("
+      )
+    );
 });
 
 export default app;

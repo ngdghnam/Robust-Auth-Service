@@ -3,6 +3,7 @@ import {
   createDatabase,
   checkConnection,
   createTableUser,
+  autoCreateAdminUser,
 } from "./config/database";
 import logger from "./config/logger";
 
@@ -14,10 +15,10 @@ const initializeServer = async () => {
     await createDatabase();
     await checkConnection();
     await createTableUser();
+    await autoCreateAdminUser();
 
     app.listen(PORT, () => {
-      // console.log(process.env.DB_NAME);
-      // console.log(">>> ", process.env.APP_NAME);
+      logger.info("Welcome to the server");
       logger.info(`${replicaApp} is running on port ${PORT}`);
     });
   } catch (error) {
