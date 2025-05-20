@@ -6,6 +6,7 @@ class User {
   user_email: string;
   user_phone: string;
   user_password: string;
+  user_role?: string = "user";
 
   constructor(
     user_id: string,
@@ -14,7 +15,8 @@ class User {
     user_first_name: string,
     user_last_name: string,
     user_phone: string,
-    user_password: string
+    user_password: string,
+    user_role: string
   ) {
     this.user_id = user_id;
     this.user_email = user_email;
@@ -23,6 +25,7 @@ class User {
     this.user_last_name = user_last_name;
     this.user_phone = user_phone;
     this.user_password = user_password;
+    this.user_role = user_role;
   }
 }
 
