@@ -33,6 +33,8 @@ class Cryptography {
     }
   }
 
+  async autoGeneratePassword() {}
+
   hashPasswordMiddleware = async (
     req: Request,
     res: Response,
