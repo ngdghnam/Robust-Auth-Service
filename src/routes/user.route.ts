@@ -6,8 +6,9 @@ const userController = new UserController();
 
 userRouter.get("/", userController.getAllUsers);
 userRouter.post("/", userController.createUser);
-userRouter.put("/{:userId}", userController.updateUser);
-userRouter.delete("/{:userId}", userController.deleteUser);
-userRouter.post("/personal-user", userController.getUserByUserEmail);
+userRouter.put("/:userId", userController.updateUser);
+userRouter.delete("/:userId", userController.deleteUser);
+userRouter.get("/search", userController.getUserByUserEmail);
+// userRouter.get("/", userController.getUserByUserName);
 
 export default userRouter;

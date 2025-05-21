@@ -18,7 +18,7 @@ class UserController {
     this.userInputValidator = new UserInputValidator();
   }
 
-  getAllUsers = async (req: Request, res: Response) => {
+  getAllUsers = async (req: Request, res: Response): Promise<void> => {
     try {
       const users = await this.userService.getAllUsers();
       res
@@ -31,17 +31,20 @@ class UserController {
             users
           )
         );
+      return;
     } catch (error) {
       res.status(500).json({ error: "Error retrieving users" });
       console.log(error);
     }
   };
 
-  getUserByUserEmail = async (req: Request, res: Response) => {
-    try {
-      const { user_email } = req.body;
+  getUserByUserName = async (req: Request, res: Response): Promise<void> => {};
 
-      if (!user_email) {
+  getUserByUserEmail = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const user_email = req.query.user_email;
+
+      if (!user_email || typeof user_email !== "string") {
         res
           .status(Code.BAD_REQUEST)
           .json(
@@ -51,20 +54,44 @@ class UserController {
               "Please checkout your fill again"
             )
           );
+        return;
       }
 
       const user = await this.userService.getUserByEmail(user_email);
-      res.status(Code.SUCCESS).json(
-        new HttpResponse(
-          Code.SUCCESS,
-          Status.SUCCESS,
-          "User retreived successfully",
-          {
-            user,
-          }
-        )
-      );
-    } catch (error) {}
+
+      if (!user) {
+        res
+          .status(Code.NOT_FOUND)
+          .json(
+            new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, "User not found")
+          );
+        return;
+      }
+
+      res
+        .status(Code.SUCCESS)
+        .json(
+          new HttpResponse(
+            Code.SUCCESS,
+            Status.SUCCESS,
+            "User retrieved successfully",
+            { user }
+          )
+        );
+
+      return;
+    } catch (error) {
+      console.error("Error retrieving user:", error);
+      res
+        .status(Code.INTERNAL_SERVER_ERROR)
+        .json(
+          new HttpResponse(
+            Code.INTERNAL_SERVER_ERROR,
+            Status.INTERNAL_SERVER_ERROR,
+            "Error retrieving user"
+          )
+        );
+    }
   };
 
   createUser = async (req: Request, res: Response) => {
@@ -207,7 +234,7 @@ class UserController {
     }
   };
 
-  deleteUser = async (req: Request, res: Response) => {
+  deleteUser = async (req: Request, res: Response): Promise<void> => {
     const userId = req.params.userId;
 
     if (!userId) {
@@ -232,6 +259,7 @@ class UserController {
           "User has been deleted successfully"
         )
       );
+    return;
   };
 }
 
