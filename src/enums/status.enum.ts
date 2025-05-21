@@ -6,4 +6,5 @@ export enum Status {
   INTERNAL_SERVER_ERROR = "Internal server error",
   UNAUTHORIZED = "Unauthorized",
   FORBIDDEN = "Forbidden",
+  NOT_FOUND = "Not found",
 }
