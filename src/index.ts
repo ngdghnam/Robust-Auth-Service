@@ -12,6 +12,7 @@ import HttpResponse from "./config/response";
 // ROUTES
 import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
+import notFoundRouter from "./routes/notFound.route";
 
 const app: Express = express();
 
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.send("Hello World! Welcome to my server");
 });
 
 // Format file.log
@@ -44,18 +45,7 @@ app.use(
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
-
 // 404 Handler
-app.use((_, res) => {
-  res
-    .status(Code.PATH_NOT_FOUND)
-    .json(
-      new HttpResponse(
-        Code.PATH_NOT_FOUND,
-        Status.PATH_NOT_FOUND,
-        "Sorry, the path you're looking for doesn't exist :("
-      )
-    );
-});
+app.use(notFoundRouter);
 
 export default app;
