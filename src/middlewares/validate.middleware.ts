@@ -4,6 +4,7 @@ import { Status } from "../enums/status.enum";
 import HttpResponse from "../config/response";
 import JwtHandler from "../utils/jwt";
 import dotenv from "dotenv";
+import logger from "../config/logger";
 
 dotenv.config();
 
@@ -27,7 +28,11 @@ class AuthMiddleware {
         const token = req.headers.authorization.split(" ")[1];
         try {
           const decoded = this.jwtHandler.decodeToken(token);
-        } catch (error) {}
+          return decoded;
+        } catch (error) {
+          logger.error("Can not validate token");
+          throw new Error();
+        }
       }
 
       res
