@@ -4,10 +4,8 @@ import express, { Express, Request, Response } from "express";
 import logger from "./config/logger";
 import morgan from "morgan";
 
-// STATUS & HTTP RESPONSE
-import { Code } from "./enums/code.enum";
-import { Status } from "./enums/status.enum";
-import HttpResponse from "./config/response";
+// Helmet
+import helmet from "helmet";
 
 // ROUTES
 import authRouter from "./routes/auth.route";
@@ -18,14 +16,15 @@ const app: Express = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World! Welcome to my server");
 });
 
 // Format file.log
-const morganFormat = ":method :url :status :response-time ms";
 // Logger
+const morganFormat = ":method :url :status :response-time ms";
 app.use(
   morgan(morganFormat, {
     stream: {
