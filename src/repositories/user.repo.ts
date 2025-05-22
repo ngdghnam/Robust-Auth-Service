@@ -20,6 +20,14 @@ class UserRepository {
     return createdUser;
   }
 
+  async findUserByUserPhone(phone: string): Promise<User | null> {
+    const user = await this.database("users")
+      .where({ user_phone: phone })
+      .first();
+
+    return user || null;
+  }
+
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await this.database("users")
       .where({ user_email: email })

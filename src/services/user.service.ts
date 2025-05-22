@@ -20,6 +20,26 @@ class UserService {
     }
   }
 
+  async getUserPhone(userPhone: string): Promise<string | null> {
+    const user = await this.userRepository.findUserByUserPhone(userPhone);
+
+    if (!user) {
+      return null;
+    }
+
+    return user.user_phone;
+  }
+
+  async getUserName(userName: string): Promise<string | null> {
+    const user = await this.userRepository.findUserByUsername(userName);
+
+    if (!user) {
+      return null;
+    }
+
+    return user.user_name;
+  }
+
   async getAllUsers(): Promise<Omit<User, "user_password">[]> {
     try {
       const users = await this.userRepository.getAllUsers();
