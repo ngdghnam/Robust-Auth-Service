@@ -12,6 +12,8 @@ import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
 import notFoundRouter from "./routes/notFound.route";
 
+import emailRouter from "./routes/emailTest.route";
+
 const app: Express = express();
 
 app.use(express.json());
@@ -44,7 +46,9 @@ app.use(
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
+app.use("/email", emailRouter);
 // 404 Handler
 app.use(notFoundRouter);
+// test email route
 
 export default app;
