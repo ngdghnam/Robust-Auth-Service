@@ -1,3 +1,8 @@
+/**
+ *
+ * @param length
+ * @returns a random password base on length
+ */
 export function generateRandomPassword(length: number = 10) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
@@ -11,5 +16,5 @@ export function generateRandomPassword(length: number = 10) {
 }
 
 // const passwordLength = 12;
-const newPassword = generateRandomPassword();
-console.log(">>>", newPassword);
+// const newPassword = generateRandomPassword();
+// console.log(">>>", newPassword);
