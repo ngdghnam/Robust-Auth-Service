@@ -46,7 +46,7 @@ app.use(
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
-app.use("/email", emailRouter);
+app.use("/spec/email", emailRouter);
 // 404 Handler
 app.use(notFoundRouter);
 // test email route
