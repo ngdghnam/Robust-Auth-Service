@@ -1,14 +1,21 @@
+// Import services
 import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 
 import Cryptography from "../utils/cryptography";
+
 import { Request, Response } from "express";
-import UserInputValidator from "../utils/validate";
+
 import { v4 as uuidv4 } from "uuid";
+
 import HttpResponse from "../config/response";
 import { Code } from "../enums/code.enum";
 import { Status } from "../enums/status.enum";
+
 import logger from "../config/logger";
+
+import UserInputValidator from "../utils/validate";
+
 import { generateRandomPassword } from "../utils/passwordGen";
 
 class AuthController {

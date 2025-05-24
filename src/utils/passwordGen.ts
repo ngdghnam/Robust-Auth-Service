@@ -1,5 +1,4 @@
 /**
- *
  * @param length
  * @returns a random password base on length
  */
